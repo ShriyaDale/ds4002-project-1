@@ -11,14 +11,14 @@ def add_sentiment_column(input_file, output_file, batch_size=32):
     if 'Reviews' not in df.columns:
         raise ValueError("Error: 'Reviews' column not found in the CSV.")
 
-    model_name = "MarieAngeA13/Sentiment-Analysis-BERT"  # uses positive/negative/neutral labels [web:2]
+    model_name = "MarieAngeA13/Sentiment-Analysis-BERT"
     print(f"Loading model: {model_name}...")
 
     device = 0 if torch.cuda.is_available() else -1
     if device == 0:
-        print("Using GPU for inference.")
+        print("Using GPU")
     else:
-        print("Using CPU. This might take a while for large files.")
+        print("Using CPU")
 
     sentiment_pipeline = pipeline(
         "sentiment-analysis",
