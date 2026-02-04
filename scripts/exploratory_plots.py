@@ -34,6 +34,12 @@ def main(show: bool = False, csv_path: str = "data/airlines_reviews.csv"):
     csv = Path(csv_path)
     df = pd.read_csv(csv)
 
+    #retrieves sentiment data
+    sentiment_csv = csv.parent / "airlines_reviews_with_sentiment.csv"
+    df_sentiment = None
+    if sentiment_csv.exists():
+        df_sentiment = pd.read_csv(sentiment_csv)
+
     out = Path("output")
     out.mkdir(exist_ok=True)
 
@@ -82,7 +88,26 @@ def main(show: bool = False, csv_path: str = "data/airlines_reviews.csv"):
         plt.show()
     plt.close()
 
-    print("Saved plots:", a, b)
+    #sentiment plot
+    if df_sentiment is not None and "sentiment" in df_sentiment.columns:
+        sentiment_counts = df_sentiment["sentiment"].str.capitalize().value_counts()
+        plt.figure(figsize=(8, 5))
+        colors = {"Positive": "green", "Neutral": "gray", "Negative": "red"}
+        sns.barplot(x=sentiment_counts.index, y=sentiment_counts.values, palette=colors)
+        plt.xlabel("Sentiment")
+        plt.ylabel("Number of Reviews")
+        plt.title("Distribution of Sentiment in Airline Reviews")
+        for i, v in enumerate(sentiment_counts.values):
+            plt.text(i, v + max(cls_counts.values) * 0.01, str(int(v)), ha="center")
+        plt.tight_layout()
+        c = out / "sentiment_distribution.png"
+        plt.savefig(c, dpi=150)
+        if show:
+            plt.show()
+        plt.close()
+        print(a, b, c)
+    else:
+        print(a, b)
 
 
 if __name__ == "__main__":
