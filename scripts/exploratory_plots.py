@@ -90,9 +90,9 @@ def main(show: bool = False, csv_path: str = "data/airlines_reviews.csv"):
 
     #sentiment plot
     if df_sentiment is not None and "sentiment" in df_sentiment.columns:
-        sentiment_counts = df_sentiment["sentiment"].value_counts()
+        sentiment_counts = df_sentiment["sentiment"].str.capitalize().value_counts()
         plt.figure(figsize=(8, 5))
-        colors = {"positive": "green", "neutral": "gray", "negative": "red"}
+        colors = {"Positive": "green", "Neutral": "gray", "Negative": "red"}
         sns.barplot(x=sentiment_counts.index, y=sentiment_counts.values, palette=colors)
         plt.xlabel("Sentiment")
         plt.ylabel("Number of Reviews")
