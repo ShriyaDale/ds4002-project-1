@@ -4,6 +4,13 @@ from transformers import pipeline
 import torch
 from tqdm import tqdm
 
+def adjust_df(input_file, output_file, columns=None):
+    if columns is None:
+        columns = ["Airline", "Reviews", "Verified", "Class"]
+    df = pd.read_csv(input_file)
+    df = df[columns]
+    df.to_csv(output_file, index=False)
+
 def add_sentiment_column(input_file, output_file, batch_size=32):
     print(f"Loading {input_file}...")
     df = pd.read_csv(input_file)
@@ -55,5 +62,7 @@ def add_sentiment_column(input_file, output_file, batch_size=32):
 
 if __name__ == "__main__":
     input_csv = "data/airlines_reviews.csv"
+    cleaned_csv = "data/airlines_reviews_cleaned.csv"
     output_csv = "data/airlines_reviews_with_sentiment.csv"
     add_sentiment_column(input_csv, output_csv, batch_size=32)
+    adjust_df(output_csv, cleaned_csv)
